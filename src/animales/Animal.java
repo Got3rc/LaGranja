@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class Animal {
+public abstract class Animal {
 
     protected String codigo;
     private LocalDate fechaNacimiento;
@@ -207,7 +207,15 @@ public class Animal {
         return "Animal{" + "codigo=" + codigo + ", fechaNacimiento=" + fechaNacimiento + ", sexo=" + sexo + ", peso=" + peso.floatValue() + '}';
     }
     
-
+    
+    //Definimos nuestro metodos abstracto
+    public abstract String hacerSonido();
+    
+    public abstract String alegrarse();
+    
+    public abstract String enfadarse();
+    
+    public abstract String queSoy();
     
     
 }
