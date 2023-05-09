@@ -14,6 +14,12 @@ public class Perro extends Animal{
         this.raza = raza;
     }
 
+    public Perro(String raza, Animal otroAnimal) {
+        super(otroAnimal);
+        this.raza = raza;
+    }
+
+    
     @Override
     public String hacerSonido() {
         return "Guau";
@@ -44,6 +50,16 @@ public class Perro extends Animal{
         this.raza = raza;
     }
     
+    //Comprobamos si el codigo es valido
+
+    @Override
+    public void setCodigo(String codigo) {
+        
+        if (!codigo.matches("p*")) {
+            throw new IllegalArgumentException();
+        }
+        super.setCodigo(codigo);
+    }
     
     
     
