@@ -5,9 +5,9 @@ public class Perro extends Animal{
 
     private String raza;
 
-    public Perro(String codigo, String fechaNacimiento, char sexo, double peso ,String raza) throws IllegalArgumentException {
+    public Perro(String codigo, String fechaNacimiento, char sexo, double peso, String raza) throws IllegalArgumentException {
         super(codigo, fechaNacimiento, sexo, peso);
-        if (!codigo.matches("p*")) {
+        if (!codigo.matches("p.*")) {
             throw new IllegalArgumentException();
         }
         this.codigo = codigo;
@@ -40,6 +40,9 @@ public class Perro extends Animal{
         return "Soy un perro";
     }
 
+    public String pasear(){
+        return "Me encanta que me saquen a pasear";
+    }
     
     //Hacemos getter y setter de raza
     public String getRaza() {
@@ -55,7 +58,7 @@ public class Perro extends Animal{
     @Override
     public void setCodigo(String codigo) {
         
-        if (!codigo.matches("p*")) {
+        if (!codigo.matches("p.*")) {
             throw new IllegalArgumentException();
         }
         super.setCodigo(codigo);
