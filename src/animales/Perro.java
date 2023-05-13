@@ -67,7 +67,7 @@ public class Perro extends Animal {
 
     @Override
     public String toString() {
-       return "Perro{" + "codigo=" + codigo + ", fechaNacimiento=" + this.getFechaNacimiento() + ", sexo=" + this.getSexo() + ", peso=" + this.getPeso()+ "raza=" + raza + '}';
+       return "Perro{" + super.toString() + "raza=" + raza + '}';
     }
     
 

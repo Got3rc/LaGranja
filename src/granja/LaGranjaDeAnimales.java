@@ -1,9 +1,10 @@
 package granja;
 
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -13,58 +14,100 @@ public class LaGranjaDeAnimales {
 
         Scanner sc = new Scanner(System.in);
 
-        int cantidadPerros = 0;
+        ArrayList<Animal> miGranja = new ArrayList();
+        Iterator iterador;
 
-        String codigo = "";
-        String raza = "";
-        char sexo = ' ';
-        double peso = 0;
-        String fechaNacimiento = "";
+        String codigoAnimal;
+        String fechaNacimientoAnimal;
+        char sexoAnimal;
+        double pesoAnimal;
+        String raza;
+        String tipoAnimal;
 
+        int numAnimales;
+        Animal animal;
         Perro perro;
-        Perro  perro2 = null;
+        Gato gato;
         
-        int cantidadCorrectos = 0;
-        
-        cantidadPerros = sc.nextInt();
+        perro = null;
+        gato = null;
+
+        System.out.println("Procesando animales de la granja");
+        System.out.println("----------------------------------");
+        numAnimales = sc.nextInt();
         sc.nextLine();
 
-        System.out.println("Procesando perros de la granja");
-        System.out.println("----------------------------------");
-        
-        
-        for (int i = 0; i < cantidadPerros; i++) {
+        for (int i = 1; i <= numAnimales; i++) {
 
-            try {
-                codigo = sc.nextLine();
-                fechaNacimiento = sc.nextLine();
-                sexo = sc.nextLine().charAt(0);
-                peso = sc.nextDouble();
-                sc.nextLine();
+            tipoAnimal = sc.nextLine();
+
+            codigoAnimal = sc.nextLine();
+            fechaNacimientoAnimal = sc.nextLine();
+            sexoAnimal = sc.nextLine().charAt(0);
+            pesoAnimal = sc.nextDouble();
+            sc.nextLine();
+
+            if (tipoAnimal.equals("perro")) {
                 raza = sc.nextLine();
-                
-                perro = new Perro(codigo, fechaNacimiento, sexo, peso, raza);
-                cantidadCorrectos++;
-                
-                if (cantidadCorrectos == 2 && perro.equals(perro2)) {
-                    System.out.println(perro.toString() + " y " + perro2.toString() + " son el mismo");
-                    cantidadCorrectos = 1;
-                }else if (cantidadCorrectos == 2) {
-                    System.out.println(perro.toString() + " y " + perro2.toString() + " son el mismo");
-                    cantidadCorrectos = 1;
+                try {
+
+                    // TO DO HERE: Crear el objeto PERRO y añadirlo a la Coleccion de animales de la granja
+                    perro = new Perro(codigoAnimal, fechaNacimientoAnimal, sexoAnimal, pesoAnimal, raza);
+                    miGranja.add(perro);
+
+                } catch (IllegalArgumentException ex) {
+                    System.out.println("ERROR procesando perro. Datos incorrectos. Procesando siguiente animal");
                 }
-                perro2 = perro;
+            } else if (tipoAnimal.equals("gato")) {
+                raza = sc.nextLine();
+                try {
+
+                    // TO DO HERE: Crear el objeto GATO y añadirlo a la coleccion de animales de la granja
+                    gato = new Gato(codigoAnimal, fechaNacimientoAnimal, sexoAnimal, pesoAnimal, raza);
+                    miGranja.add(gato);
+                } catch (IllegalArgumentException ex) {
+                    System.out.println("ERROR procesando gato. Datos incorrectos. Procesando siguiente animal");
+                }
+            }
+        }
+
+        // TO DO HERE: Iterar sobre la coleccion, imprimiendo la informacion que se pide de cada animal de la granja
+        iterador = miGranja.iterator();
+
+        while (iterador.hasNext()) {
+
+            animal = (Animal) iterador.next();
+            System.out.println();
+            if (animal.getClass() == perro.getClass()) {
                 
-            } catch (IllegalArgumentException e) {
-            
-                System.out.println("ERROR. Procesando siguiente perro");
+                animal = (Perro) animal;
+                
+                System.out.println(animal.toString());
+                System.out.println(animal.queSoy());
+                System.out.println("Hago " + animal.hacerSonido());
+                System.out.println("Cuando estoy alegre " + animal.alegrarse());
+                System.out.println("Cuando me enfado " + animal.enfadarse());
+                
+            } else if (animal.getClass() == gato.getClass()) {
+                
+                animal = (Gato) animal;
+                
+                System.out.println(animal.toString());
+                System.out.println(animal.queSoy());
+                System.out.println("Hago " + animal.hacerSonido());
+                System.out.println("Cuando estoy alegre " + animal.alegrarse());
+                System.out.println("Cuando me enfado " + animal.enfadarse());
                 
             }
 
         }
 
+        miGranja.clear();
     }
+
 }
+
+
 
 abstract class Animal {
 
@@ -76,6 +119,7 @@ abstract class Animal {
     final private DateTimeFormatter FORMATO_GUION = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     final private DateTimeFormatter FORMATO_BARRA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     final private DateTimeFormatter FORMATO_TOSTRING = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    
     
     //CREO LOS CONSTRUCTORES
     public Animal(String codigo, String fechaNacimiento, char sexo, double peso) throws IllegalArgumentException {
@@ -280,6 +324,9 @@ abstract class Animal {
     
     
 }
+
+
+
 class Perro extends Animal {
 
     private String raza;
@@ -345,7 +392,7 @@ class Perro extends Animal {
 
     @Override
     public String toString() {
-        return "Perro{"+ super.toString() + "raza=" + raza + '}';
+       return "Perro{" + super.toString() + "raza=" + raza + '}';
     }
     
 
@@ -358,7 +405,7 @@ class Perro extends Animal {
         
         final Perro other = (Perro) obj;
         
-        if (!Objects.equals(this.raza, other.raza)) {
+        if (!Objects.equals(this.raza, other.getRaza())) {
             return false;
         }
         
@@ -375,7 +422,108 @@ class Perro extends Animal {
         hash = 59 * hash + Objects.hashCode(this.raza);
         return hash;
     }
+
+    
+    
     
 
 }
 
+
+class Gato extends Animal {
+
+        private String raza;
+
+        public Gato(String codigo, String fechaNacimiento, char sexo, double peso, String raza) throws IllegalArgumentException {
+            super(codigo, fechaNacimiento, sexo, peso);
+            if (!codigo.matches("g.*")) {
+                throw new IllegalArgumentException();
+            }
+            this.codigo = codigo;
+            this.raza = raza;
+        }
+
+        public Gato(String raza, Animal otroAnimal) {
+            super(otroAnimal);
+            this.raza = raza;
+        }
+
+    
+
+        @Override
+        public String hacerSonido() {
+            return "Miau";
+        }
+
+        @Override
+        public String alegrarse() {
+            return "Ronroneo y me froto contra tus piernas";
+        }
+
+        @Override
+        public String enfadarse() {
+            return "Me bufo y saco las u??as";
+        }
+
+        @Override
+        public String queSoy() {
+            return "Soy un gato";
+        }
+
+        public String pasear() {
+            return "Me encanta que me saquen a pasear";
+        }
+
+        //Hacemos getter y setter de raza
+        public String getRaza() {
+            return raza;
+        }
+
+        public void setRaza(String raza) {
+            this.raza = raza;
+        }
+
+        //Comprobamos si el codigo es valido
+        @Override
+        public void setCodigo(String codigo) {
+
+            if (!codigo.matches("g.*")) {
+                throw new IllegalArgumentException();
+            }
+            super.setCodigo(codigo);
+        }
+
+        //CREAMOS EL OVERRAID DE LOS METODOS SUPERCLASE OBJET
+        @Override
+        public String toString() {
+            return "Gato{"+ super.toString() + "raza=" + raza + '}';
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+
+            if (!super.equals(obj)) {
+                return false;
+            }
+
+            final Gato other = (Gato) obj;
+
+            if (!Objects.equals(this.raza, other.raza)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 37 * hash + Objects.hashCode(this.codigo);
+            hash = 37 * hash + Objects.hashCode(this.getFechaNacimiento());
+            hash = 37 * hash + this.getSexo();
+            hash = 37 * hash + (int) (Double.doubleToLongBits(this.getPeso()) ^ (Double.doubleToLongBits(this.getPeso()) >>> 32));
+            hash = 59 * hash + Objects.hashCode(this.raza);
+            return hash;
+        }
+
+    }
