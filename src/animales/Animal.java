@@ -14,6 +14,7 @@ public abstract class Animal {
 
     final private DateTimeFormatter FORMATO_GUION = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     final private DateTimeFormatter FORMATO_BARRA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    final private DateTimeFormatter FORMATO_TOSTRING = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
     
     //CREO LOS CONSTRUCTORES
@@ -204,7 +205,7 @@ public abstract class Animal {
 
     @Override
     public String toString() {
-        return "Animal{" + "codigo=" + codigo + ", fechaNacimiento=" + fechaNacimiento + ", sexo=" + sexo + ", peso=" + peso.floatValue() + '}';
+        return "Animal{" + "codigo=" + codigo + ", fechaNacimiento=" + fechaNacimiento.format(FORMATO_TOSTRING) + ", sexo=" + sexo + ", peso=" + peso.floatValue() + '}';
     }
     
     

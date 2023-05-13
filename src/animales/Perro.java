@@ -1,7 +1,8 @@
 package animales;
 
+import java.util.Objects;
 
-public class Perro extends Animal{
+public class Perro extends Animal {
 
     private String raza;
 
@@ -19,7 +20,6 @@ public class Perro extends Animal{
         this.raza = raza;
     }
 
-    
     @Override
     public String hacerSonido() {
         return "Guau";
@@ -40,10 +40,10 @@ public class Perro extends Animal{
         return "Soy un perro";
     }
 
-    public String pasear(){
+    public String pasear() {
         return "Me encanta que me saquen a pasear";
     }
-    
+
     //Hacemos getter y setter de raza
     public String getRaza() {
         return raza;
@@ -52,18 +52,54 @@ public class Perro extends Animal{
     public void setRaza(String raza) {
         this.raza = raza;
     }
-    
-    //Comprobamos si el codigo es valido
 
+    //Comprobamos si el codigo es valido
     @Override
     public void setCodigo(String codigo) {
-        
+
         if (!codigo.matches("p.*")) {
             throw new IllegalArgumentException();
         }
         super.setCodigo(codigo);
     }
+
+    //CREAMOS EL OVERRAID DE LOS METODOS SUPERCLASE OBJET
+
+    @Override
+    public String toString() {
+       return "Perro{" + "codigo=" + codigo + ", fechaNacimiento=" + this.getFechaNacimiento() + ", sexo=" + this.getSexo() + ", peso=" + this.getPeso()+ "raza=" + raza + '}';
+    }
+    
+
+    @Override
+    public boolean equals(Object obj) {
+        
+        if (!super.equals(obj)) {
+            return false;
+        }
+        
+        final Perro other = (Perro) obj;
+        
+        if (!Objects.equals(this.raza, other.raza)) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.codigo);
+        hash = 37 * hash + Objects.hashCode(this.getFechaNacimiento());
+        hash = 37 * hash + this.getSexo();
+        hash = 37 * hash + (int) (Double.doubleToLongBits(this.getPeso()) ^ (Double.doubleToLongBits(this.getPeso()) >>> 32));
+        hash = 59 * hash + Objects.hashCode(this.raza);
+        return hash;
+    }
+
     
     
     
+
 }

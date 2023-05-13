@@ -1,5 +1,6 @@
 package granja;
 
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,84 +21,47 @@ public class LaGranjaDeAnimales {
         double peso = 0;
         String fechaNacimiento = "";
 
-        Perro perro = null;
-
-        String[] fechaVector = new String[2];
-
+        Perro perro;
+        Perro  perro2 = null;
+        
+        int cantidadCorrectos = 0;
+        
         cantidadPerros = sc.nextInt();
         sc.nextLine();
 
         System.out.println("Procesando perros de la granja");
         System.out.println("----------------------------------");
+        
+        
         for (int i = 0; i < cantidadPerros; i++) {
 
-            codigo = sc.nextLine();
-            fechaNacimiento = sc.nextLine();
-            sexo = sc.nextLine().charAt(0);
-            peso = sc.nextDouble();
-            sc.nextLine();
-            raza = sc.nextLine();
-
             try {
-
+                codigo = sc.nextLine();
+                fechaNacimiento = sc.nextLine();
+                sexo = sc.nextLine().charAt(0);
+                peso = sc.nextDouble();
+                sc.nextLine();
+                raza = sc.nextLine();
+                
                 perro = new Perro(codigo, fechaNacimiento, sexo, peso, raza);
-
-                fechaVector = fechaNacimiento.split("/");
-                System.out.println("Procesado: " + perro.getCodigo() + " " + perro.getRaza()
-                        + " " + perro.getSexo() + " de " + perro.getPeso() + " kilos, nacido el "
-                        + fechaVector[0] + " del " + fechaVector[1] + " de " + fechaVector[2]);
-                System.out.println(perro.queSoy());
-                System.out.println(perro.pasear());
-                System.out.println("Hago " + perro.hacerSonido());
-                System.out.println("Cuando estoy alegre " + perro.alegrarse());
-                System.out.println("Cuando me enfado " + perro.enfadarse());
-
-            } catch (IllegalArgumentException e) {
-                System.out.println("ERROR. Procesando siguiente perro");
-            }
-
-        }
-
-        System.out.println("Cambiando datos del ultimo perro");
-        System.out.println("----------------------------------");
-
-        int contadorDatos = 0;
-
-        while (contadorDatos < 4) {
-
-            try {
-                switch (contadorDatos) {
-
-                    case 0:
-                        codigo = sc.nextLine();
-                        perro.setCodigo(codigo);
-                        break;
-                    case 1:
-                        fechaNacimiento = sc.nextLine();
-                        perro.setFechaNacimiento(fechaNacimiento);
-                        break;
-                    case 2:
-                        sexo = sc.nextLine().charAt(0);
-                        perro.setSexo(sexo);
-                        break;
-                    case 3:
-                        peso = sc.nextDouble();
-                        perro.setPeso(peso);
-                        break;
-                    default:
-                        throw new AssertionError();
+                cantidadCorrectos++;
+                
+                if (cantidadCorrectos == 2 && perro.equals(perro2)) {
+                    System.out.println(perro.toString() + " y " + perro2.toString() + " son el mismo");
+                    cantidadCorrectos = 1;
+                }else if (cantidadCorrectos == 2) {
+                    System.out.println(perro.toString() + " y " + perro2.toString() + " son el mismo");
+                    cantidadCorrectos = 1;
                 }
-                contadorDatos++;
+                perro2 = perro;
+                
             } catch (IllegalArgumentException e) {
-                System.out.println("Dato erroneo. No se hace el cambio");
+            
+                System.out.println("ERROR. Procesando siguiente perro");
+                
             }
 
         }
-
-        fechaVector = fechaNacimiento.split("/");
-        System.out.println("Procesado: " + perro.getCodigo() + " " + perro.getRaza()
-                + " " + perro.getSexo() + " de " + perro.getPeso() + " kilos, nacido el "
-                + fechaVector[0] + " del " + fechaVector[1] + " de " + fechaVector[2]);
 
     }
 }
@@ -111,7 +75,8 @@ abstract class Animal {
 
     final private DateTimeFormatter FORMATO_GUION = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     final private DateTimeFormatter FORMATO_BARRA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+    final private DateTimeFormatter FORMATO_TOSTRING = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    
     //CREO LOS CONSTRUCTORES
     public Animal(String codigo, String fechaNacimiento, char sexo, double peso) throws IllegalArgumentException {
 
@@ -124,7 +89,7 @@ abstract class Animal {
         this.sexo = sexo;
         this.peso = peso;
     }
-
+ 
     public Animal(Animal otroAnimal) {
         this.codigo = otroAnimal.codigo;
         this.fechaNacimiento = otroAnimal.fechaNacimiento;
@@ -159,9 +124,9 @@ abstract class Animal {
 
     public void setPeso(double peso) {
         if (!esPesoValido(peso)) {
-            throw new IllegalArgumentException();
+           throw new IllegalArgumentException();
         }
-
+        
         this.peso = peso;
     }
 
@@ -208,13 +173,14 @@ abstract class Animal {
     }
 
     //COMPROBAR PESO VALIDO
-    private boolean esPesoValido(double peso) {
-
+    private boolean esPesoValido(double peso){
+    
         return peso > 0;
-
+        
     }
-
+    
     // CREAMOS LOS GETTER
+
     public String getCodigo() {
         return this.codigo;
     }
@@ -226,7 +192,7 @@ abstract class Animal {
     public double getPeso() {
         return this.peso;
     }
-
+    
     public String getFechaNacimiento(char separador) {
 
         String FechaDevolver = "";
@@ -248,6 +214,7 @@ abstract class Animal {
         return FechaDevolver;
     }
 
+    
     public String getFechaNacimiento() {
 
         String fechaDevolver = "";
@@ -259,8 +226,9 @@ abstract class Animal {
         }
         return fechaDevolver;
     }
-
+    
     //HACEMOS LOS OVERRIDE
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -297,20 +265,21 @@ abstract class Animal {
 
     @Override
     public String toString() {
-        return "Animal{" + "codigo=" + codigo + ", fechaNacimiento=" + fechaNacimiento + ", sexo=" + sexo + ", peso=" + peso.floatValue() + '}';
+        return "Animal{" + "codigo=" + codigo + ", fechaNacimiento=" + fechaNacimiento.format(FORMATO_TOSTRING) + ", sexo=" + sexo + ", peso=" + peso.floatValue() + '}';
     }
-
+    
+    
     //Definimos nuestro metodos abstracto
     public abstract String hacerSonido();
-
+    
     public abstract String alegrarse();
-
+    
     public abstract String enfadarse();
-
+    
     public abstract String queSoy();
-
+    
+    
 }
-
 class Perro extends Animal {
 
     private String raza;
@@ -372,4 +341,41 @@ class Perro extends Animal {
         super.setCodigo(codigo);
     }
 
+    //CREAMOS EL OVERRAID DE LOS METODOS SUPERCLASE OBJET
+
+    @Override
+    public String toString() {
+        return "Perro{"+ super.toString() + "raza=" + raza + '}';
+    }
+    
+
+    @Override
+    public boolean equals(Object obj) {
+        
+        if (!super.equals(obj)) {
+            return false;
+        }
+        
+        final Perro other = (Perro) obj;
+        
+        if (!Objects.equals(this.raza, other.raza)) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.codigo);
+        hash = 37 * hash + Objects.hashCode(this.getFechaNacimiento());
+        hash = 37 * hash + this.getSexo();
+        hash = 37 * hash + (int) (Double.doubleToLongBits(this.getPeso()) ^ (Double.doubleToLongBits(this.getPeso()) >>> 32));
+        hash = 59 * hash + Objects.hashCode(this.raza);
+        return hash;
+    }
+    
+
 }
+
